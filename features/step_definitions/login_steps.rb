@@ -12,7 +12,7 @@ Then /^I should be redirected to User Timeline page$/ do
   screen_shot_and_save_page
 end
 
-Given /^I logged in with '(.*?)' and '(.*?)'$/ do |email, password|
+Given /^I logged in with "(.*?)" and "(.*?)"$/ do |email, password|
   step "I am on Login page"
   step "I login with credentials:", table(%{
     | user_email | #{email}       |
@@ -22,12 +22,12 @@ Given /^I logged in with '(.*?)' and '(.*?)'$/ do |email, password|
 end
 
 Given /^I logged in as an admin$/ do
-  step "I logged in with 'admin@example.com' and 'secret'"
+  step %{I logged in with "admin@example.com" and "secret"}
 end
 
 Given /^I can login as a user$/ do
   user = get_user
-  step "I logged in with '#{user['email']}' and '#{user['password']}'"
+  step %{I logged in with "#{user['email']}" and "#{user['password']}"}
 end
 
 When /^I logout$/ do
