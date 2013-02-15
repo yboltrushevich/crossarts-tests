@@ -8,3 +8,8 @@ Feature: User manages media content
 	Given I logged in with "user18@example.com" and "secret"
     When I create set
     Then I see set details page
+
+  Scenario: creating a presentation
+    Given I logged in with "user18@example.com" and "secret"
+	When I create presentation
+	Then I see presentation details page

@@ -6,6 +6,7 @@ require 'rspec/expectations'
 require 'faker'
 
 Capybara.default_driver = :selenium
+Capybara.default_wait_time = 5
 Capybara.default_selector = :css
 Capybara.app_host = "http://beta.crossexchange.com"
 
