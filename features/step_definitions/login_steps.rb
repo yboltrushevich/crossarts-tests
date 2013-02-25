@@ -4,7 +4,7 @@ end
 
 When /^I login with credentials:$/ do |table|
   table.rows_hash.each { |field, value| fill_in field, :with => value }
-  click_button("Login")
+  find('.btn').click
 end
 
 Then /^I should be redirected to User Timeline page$/ do
@@ -33,5 +33,5 @@ end
 When /^I logout$/ do
   page.find('.user-more').click
   page.find('.user-logout').click
-  wait_time 2
+  sleep 2
 end

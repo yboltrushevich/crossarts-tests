@@ -4,6 +4,7 @@ require 'selenium/webdriver'
 require 'rspec/expectations'
 #require 'capybara-screenshot/cucumber'
 require 'faker'
+require 'yaml'
 
 Capybara.default_driver = :selenium
 Capybara.default_wait_time = 5
