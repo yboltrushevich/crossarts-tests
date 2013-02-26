@@ -79,9 +79,37 @@ Then /^I see presentation details page$/ do
 end
 
 When /^I had at least one media set in personal library$/ do
-  pending
+  step "I create set"
 end
 
 When /^I create set with existing items from media library$/ do
-  pending
+  #Click Library
+  sleep 2
+  find('.library').click
+
+  sleep 5
+  #Click Add Set
+  all('div#media-header.profile-header .button').first.click
+
+  # Wizard Step 1: Define set title
+  set_title = Faker::Company.bs
+  page.find(:css, "div.wizard-step-1 input.name").set set_title
+  page.execute_script("$('.ok').click();")
+
+  # Wizard Step 2: Upload artwork
+  #Click on [Select from Media Library] link
+  all('.wizard-step-uploader .tabs-menu li[data-sets-link="true"] a').first.click
+  sleep 2
+  all(".content-set-album span img").first.click
+  sleep 2
+  all(".item-container .content-item img").first.click
+  sleep 2
+  page.execute_script("$('.ok').click();")
+
+  # Wizard Step 3: Choose categories
+  all(".modal-wizard div.category").first.click
+  page.execute_script("$('.ok').click();")
+
+  # Wizard Step 4: Remain access type by default and Publish
+  page.execute_script("$('.ok').click();")
 end

@@ -31,7 +31,10 @@ Given /^I can login as a user$/ do
 end
 
 When /^I logout$/ do
-  page.find('.user-more').click
-  page.find('.user-logout').click
+  #page.find('.user-more').click
+  page.execute_script("$('.user-more').click();")
+
+  #page.find('.user-logout').click
+  page.execute_script("$('.user-logout').click();")
   sleep 2
 end

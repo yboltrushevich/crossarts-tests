@@ -4,7 +4,6 @@ Feature: User manages media content
   As a user
   I want manage my media content
 
-  @set
   Scenario: creating a set
 	Given I logged in with "user18@example.com" and "secret"
     When I create set
@@ -15,6 +14,7 @@ Feature: User manages media content
 	When I create presentation
 	Then I see presentation details page
 
+  @set_existing_media
   Scenario: create a set containing existing items from media library
     Given I logged in with "user18@example.com" and "secret"
     And I had at least one media set in personal library
