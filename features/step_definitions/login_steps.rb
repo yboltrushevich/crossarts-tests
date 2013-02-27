@@ -7,8 +7,9 @@ When /^I login with credentials:$/ do |table|
   find('.btn').click
 end
 
-Then /^I should be redirected to User Timeline page$/ do
-  page.should have_css("body.user-timeline_events-index")
+Then /^I should be redirected to Home page$/ do
+  page.should have_css("body.pages-index.signed-in")
+  sleep 5
   screen_shot_and_save_page
 end
 
@@ -18,7 +19,7 @@ Given /^I logged in with "(.*?)" and "(.*?)"$/ do |email, password|
     | user_email | #{email}       |
 	  | user_password | #{password} |
   })
-  step "I should be redirected to User Timeline page"
+  step "I should be redirected to Home page"
 end
 
 Given /^I logged in as an admin$/ do

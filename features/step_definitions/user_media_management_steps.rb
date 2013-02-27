@@ -119,7 +119,7 @@ When /^I upload media to existing set$/ do
   #Click Library
   sleep 2
   find('.library').click
-  sleep 2
+  sleep 3
 
   #Open the first Set
   all('.content-set a').first.click
