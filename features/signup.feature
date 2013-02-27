@@ -4,24 +4,14 @@ Feature: Sign up
   As a user
   I want to be able to sign up
 
-  @artist
-  Scenario: User signs up with valid data as artist
+  Scenario Outline: Signing up with different user type
     Given I am not logged in
-    When I sign up with valid data as artist
-    And admin confirms my registration
+    And I sign up with valid data as <user>
+    When admin confirms my registration
     Then I can login as a user
 
-  @artist_team
-  Scenario: User signs up with valid data as artist team
-    Given I am not logged in
-    When I sign up with valid data as artist team
-    And admin confirms my registration
-    Then I can login as a user
-
-  @consumer
-  Scenario: User signs up with valid data as consumer
-    Given I am not logged in
-    When I sign up with valid data as consumer
-    And admin confirms my registration
-    Then I can login as a user
-
+  Examples:
+    | user        |
+    | artist      |
+    | artist team |
+    | consumer    |

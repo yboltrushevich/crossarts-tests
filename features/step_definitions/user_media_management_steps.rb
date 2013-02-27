@@ -30,7 +30,8 @@ When /^I create set$/ do
 end
 
 Then /^I see set details page$/ do
-  page.should have_css(".flash-message")
+  # Doesn't work for adding artwork to existing set
+  #page.should have_css(".flash-message")
   page.should have_css('.content_sets-show')
 end
 
@@ -78,7 +79,7 @@ Then /^I see presentation details page$/ do
   page.should have_content(@presentation_title)
 end
 
-When /^I had at least one media set in personal library$/ do
+When /^I have at least one media set in personal library$/ do
   step "I create set"
 end
 
@@ -87,7 +88,7 @@ When /^I create set with existing items from media library$/ do
   sleep 2
   find('.library').click
 
-  sleep 5
+  sleep 3
   #Click Add Set
   all('div#media-header.profile-header .button').first.click
 
@@ -112,4 +113,37 @@ When /^I create set with existing items from media library$/ do
 
   # Wizard Step 4: Remain access type by default and Publish
   page.execute_script("$('.ok').click();")
+end
+
+When /^I upload media to existing set$/ do
+  #Click Library
+  sleep 2
+  find('.library').click
+  sleep 2
+
+  #Open the first Set
+  all('.content-set a').first.click
+
+  #Click Add Artworks
+  find('a.button').click
+
+  # Upload artwork
+  path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  sleep 3
+  #attach_file ".files-uploader-step input[name='file']", path
+  within(".files-uploader-step") do
+    attach_file "file", path
+  end
+  page.has_selector?(".file-controls .thumbnail img")
+  page.execute_script("$('.ok').click();")
+end
+
+Then /^I see created set with selected items$/ do
+  #TODO
+  step 'I see set details page'
+end
+
+Then /^I see uploaded media in selected set$/ do
+  #TODO
+  step 'I see set details page'
 end

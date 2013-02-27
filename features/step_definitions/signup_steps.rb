@@ -73,7 +73,7 @@ When /^I sign up with valid data as artist team$/ do
   page.execute_script("$('.create').click();")
 
   #Confirmation page
-  sleep 3
+  sleep 4
   page.should have_css('div.registration-step-1 input#confirmation-token')
   find('.close').click
 end
