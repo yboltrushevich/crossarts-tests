@@ -174,3 +174,38 @@ Then /^I see uploaded media in selected set$/ do
   page.should have_content(@set_title)
   page.should have_content(@filename)
 end
+
+When /^I change set data$/ do
+  #Click Library
+  sleep 5
+  find('.library').click
+  sleep 5
+
+  #Open the first Set
+  all('.content-set a').first.click
+  
+  #Click Preferences icon
+  find('li.submenu-item a.edit-button-img').click
+  #Click Edit link
+  page.execute_script("$('li.submenu-item a')[1].click()")
+  
+  # Define new set title
+  @new_set_title = Faker::Company.bs
+  fill_in "content_set_title", :with => @new_set_title
+
+  #Define new set description
+  @new_set_description = Faker::Company.bs
+  fill_in "content_set_description", :with => @new_set_description
+  
+  #Change category
+  find(".category-input").set("name_30")
+  all("ul.dropdown-menu li.active a").first.click
+  
+  #Click Done button
+  find('.done-button').click
+end
+
+Then /^I see updated set details$/ do
+  page.should have_css('.content_sets-show')
+  page.should have_content(@new_set_title)
+end

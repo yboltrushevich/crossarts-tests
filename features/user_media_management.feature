@@ -25,6 +25,7 @@ Feature: User manages media content
     When I upload media to existing set
     Then I see uploaded media in selected set
 	
+  @edit_set
   Scenario: editing a set
     Given I have at least one media set in personal library
 	When I change set data
