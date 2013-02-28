@@ -24,3 +24,8 @@ Feature: User manages media content
     Given I have at least one media set in personal library
     When I upload media to existing set
     Then I see uploaded media in selected set
+	
+  Scenario: editing a set
+    Given I have at least one media set in personal library
+	When I change set data
+	Then I see updated set details
