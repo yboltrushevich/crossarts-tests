@@ -7,13 +7,17 @@ When /^I create set$/ do
   all('div#media-header.profile-header .button').first.click
 
   # Wizard Step 1: Define set title
-  set_title = Faker::Company.bs
-  page.find(:css, "div.wizard-step-1 input.name").set set_title
+  @set_title = Faker::Company.bs
+  page.find(:css, "div.wizard-step-1 input.name").set @set_title
   page.execute_script("$('.ok').click();")
 
   # Wizard Step 2: Upload artwork
   path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+      path.gsub!(/\//, "\\")
+  end
   sleep 3
+
   #attach_file ".files-uploader-step input[name='file']", path
   within(".files-uploader-step") do
 	  attach_file "file", path
@@ -33,6 +37,7 @@ Then /^I see set details page$/ do
   # Doesn't work for adding artwork to existing set
   #page.should have_css(".flash-message")
   page.should have_css('.content_sets-show')
+  page.should have_content(@set_title)
 end
 
 When /^I create presentation$/ do
@@ -54,6 +59,10 @@ When /^I create presentation$/ do
 
   # Upload presentation cover
   path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+      path.gsub!(/\//, "\\")
+  end
+  
   within(".item-fields-with-poster") { attach_file "file", path}
   sleep 5
   page.execute_script("$('.ok').click();")
@@ -85,17 +94,18 @@ end
 
 When /^I create set with existing items from media library$/ do
   #Click Library
-  sleep 2
+  sleep 3
   find('.library').click
 
-  sleep 3
+  sleep 5
   #Click Add Set
   all('div#media-header.profile-header .button').first.click
 
   # Wizard Step 1: Define set title
-  set_title = Faker::Company.bs
-  page.find(:css, "div.wizard-step-1 input.name").set set_title
+  @set_title = Faker::Company.bs
+  page.find(:css, "div.wizard-step-1 input.name").set @set_title
   page.execute_script("$('.ok').click();")
+  sleep 2
 
   # Wizard Step 2: Upload artwork
   #Click on [Select from Media Library] link
@@ -117,9 +127,9 @@ end
 
 When /^I upload media to existing set$/ do
   #Click Library
-  sleep 2
+  sleep 5
   find('.library').click
-  sleep 3
+  sleep 5
 
   #Open the first Set
   all('.content-set a').first.click
@@ -129,6 +139,9 @@ When /^I upload media to existing set$/ do
 
   # Upload artwork
   path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+      path.gsub!(/\//, "\\")
+  end
   sleep 3
   #attach_file ".files-uploader-step input[name='file']", path
   within(".files-uploader-step") do

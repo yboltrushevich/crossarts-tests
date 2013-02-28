@@ -57,6 +57,7 @@ When /^I sign up with valid data as artist team$/ do
 
   # Click Create Account button
   find('div#artist.option .button').click
+  sleep 2
 
   #Choose Artist Team option
   find("div.area.roles div.option[data-role='artist_team']").click
