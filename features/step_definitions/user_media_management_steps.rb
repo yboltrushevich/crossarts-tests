@@ -2,7 +2,7 @@ When /^I create set$/ do
   #Click Library
   find('.library').click
 
-  sleep 3
+  sleep 5
   #Click Add Set
   all('div#media-header.profile-header .button').first.click
 
@@ -16,6 +16,7 @@ When /^I create set$/ do
   if path.match(/^D:\//)
       path.gsub!(/\//, "\\")
   end
+  @filename = 'image1'
   sleep 3
 
   #attach_file ".files-uploader-step input[name='file']", path
@@ -34,10 +35,10 @@ When /^I create set$/ do
 end
 
 Then /^I see set details page$/ do
-  # Doesn't work for adding artwork to existing set
-  #page.should have_css(".flash-message")
+  page.should have_css(".flash-message")
   page.should have_css('.content_sets-show')
   page.should have_content(@set_title)
+  page.should have_content(@filename)
 end
 
 When /^I create presentation$/ do
@@ -62,6 +63,7 @@ When /^I create presentation$/ do
   if path.match(/^D:\//)
       path.gsub!(/\//, "\\")
   end
+  @filename = 'image1'
   
   within(".item-fields-with-poster") { attach_file "file", path}
   sleep 5
@@ -111,11 +113,16 @@ When /^I create set with existing items from media library$/ do
   #Click on [Select from Media Library] link
   all('.wizard-step-uploader .tabs-menu li[data-sets-link="true"] a').first.click
   sleep 2
+  #Click the first set
   all(".content-set-album span img").first.click
   sleep 2
+  #Click the first trumb
+  @file_url = all(".content-set-album span img").first[:src]
+  puts @file_url
   all(".item-container .content-item img").first.click
   sleep 2
   page.execute_script("$('.ok').click();")
+  @filename = 'crap'
 
   # Wizard Step 3: Choose categories
   all(".modal-wizard div.category").first.click
@@ -143,7 +150,8 @@ When /^I upload media to existing set$/ do
       path.gsub!(/\//, "\\")
   end
   sleep 3
-  #attach_file ".files-uploader-step input[name='file']", path
+  @filename = 'image1'
+  
   within(".files-uploader-step") do
     attach_file "file", path
   end
@@ -152,11 +160,13 @@ When /^I upload media to existing set$/ do
 end
 
 Then /^I see created set with selected items$/ do
-  #TODO
-  step 'I see set details page'
+  page.should have_css('.content_sets-show')
+  page.should have_content(@set_title)
+  page.should have_css(".item-container .content-item img[src='"+@file_url+"']")
 end
 
 Then /^I see uploaded media in selected set$/ do
-  #TODO
-  step 'I see set details page'
+  page.should have_css('.content_sets-show')
+  page.should have_content(@set_title)
+  page.should have_content(@filename)
 end
