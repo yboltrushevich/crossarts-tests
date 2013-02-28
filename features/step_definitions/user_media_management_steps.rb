@@ -53,8 +53,11 @@ When /^I create presentation$/ do
   @presentation_title = Faker::Company.bs
   fill_in "presentation_title", :with => @presentation_title
   find('div#presentation_visibility_chzn.chzn-container a.chzn-single').click
-  find('ul.chzn-results li', text:'Everyone').click
-
+  
+  #Doesn't work for Russian localization
+  #find('ul.chzn-results li', text:'Everyone').click
+  all('ul.chzn-results li').first.click
+  
   find(".category-input").set("name_67")
   all("ul.dropdown-menu li.active a").first.click
 
@@ -71,11 +74,13 @@ When /^I create presentation$/ do
   sleep 2
 
   #Add widget
-  click_link("Add Content Item")
+  click_link("add-widget-content_item")
   within(".upload-tab-content"){attach_file "file", path}
 
-  # BUG with categories
-  click_link("Create Presentation")
+  # BUG with categories name_1
+  #Doesn't work for Rus locale
+  #click_link("Create Presentation")
+  find('a.done-button.preview-save-button').click
 
   #Create presentation via preview mode
 =begin
@@ -118,7 +123,6 @@ When /^I create set with existing items from media library$/ do
   sleep 2
   #Click the first trumb
   @file_url = all(".content-set-album span img").first[:src]
-  puts @file_url
   all(".item-container .content-item img").first.click
   sleep 2
   page.execute_script("$('.ok').click();")
