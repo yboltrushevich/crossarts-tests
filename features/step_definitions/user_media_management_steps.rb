@@ -197,15 +197,107 @@ When /^I change set data$/ do
   @new_set_description = Faker::Company.bs
   fill_in "content_set_description", :with => @new_set_description
   
-  #Change category
+  #Add a new category
   find(".category-input").set("name_30")
   all("ul.dropdown-menu li.active a").first.click
   
+  #Change set type
+  find('div#content_set_professional_art_piece_chzn.chzn-container a.chzn-single').click
+  find('.chzn-results li#content_set_professional_art_piece_chzn_o_1.active-result').click
+  
+  #Change set visibility settings
+  find('div#content_set_visibility_chzn.chzn-container a.chzn-single').click
+  find('ul.chzn-results li#content_set_visibility_chzn_o_3.active-result').click
+  
+  #Upload content item
+  path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+      path.gsub!(/\//, "\\")
+  end
+  @filename = 'image1'
+  within(".uploader-box-multiple"){attach_file "file", path}
+  
   #Click Done button
-  find('.done-button').click
+  page.execute_script("$('input.done-button').click();")
+  sleep 2
 end
 
 Then /^I see updated set details$/ do
   page.should have_css('.content_sets-show')
   page.should have_content(@new_set_title)
+  page.should have_content(@filename)
+end
+
+When /^I delete set$/ do
+	#Click Library
+	find('.library').click
+	sleep 2
+  
+	sets = all('.content-set h4.item-title')
+	sets.each{ |set|
+		if set.text == @set_title
+			set.parent.click
+			break
+		end
+	}
+	#Click Preferences icon
+	find('li.submenu-item a.edit-button-img').click
+	#Click Delete link
+	page.execute_script("$('li.submenu-item a')[2].click()")
+	page.driver.browser.switch_to.alert.accept
+	sleep 5
+end
+
+Then /^I see media library page without this set$/ do
+	page.should have_css('.user-media-index')
+	sets = all('.content-set h4.item-title')
+	sets.each{ |set|
+		set.text == @set_title rescue (raise "Set #{@set_title} hasn't been deleted")
+	}
+end
+
+When /^I copy the set to user showcase$/ do
+	#Click Library
+	find('.library').click
+	sleep 2
+  
+	sets = all('.content-set h4.item-title')
+	sets.each{ |set|
+		if set.text == @set_title
+			set.parent.click
+			break
+		end
+	}
+	#Click Preferences icon
+	find('li.submenu-item a.edit-button-img').click
+	#Click Copy to Showcase link
+	page.execute_script("$('li.submenu-item a')[3].click()")
+	sleep 2
+end
+
+Then /^I see the set on user showcase$/ do
+	#Go to Showcase list
+	find('.back-arrow').click
+	
+	flag = false
+	sets = all('.content-set h4.item-title')
+	sets.each{ |set|
+		if set.text == @set_title 
+			flag = true
+			break
+		end	
+	}
+	!flag rescue (raise "Set #{@set_title} hasn't been copied to showcase")
+end
+
+Given /^I have at least one presentation in personal library$/ do 
+	pending
+end
+
+When /^I create presentation with existing items from media library$/ do
+	pending
+end
+
+Then /^I see created presentation with selected items$/ do
+	pending
 end

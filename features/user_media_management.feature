@@ -4,9 +4,8 @@ Feature: User manages media content
   I want manage my media content
 
  Background:
-   Given I logged in with "user25@example.com" and "secret"
+   Given I logged in with "user28@example.com" and "secret"
 
-  @set
   Scenario: creating a set
     When I create set
     Then I see set details page
@@ -25,8 +24,22 @@ Feature: User manages media content
     When I upload media to existing set
     Then I see uploaded media in selected set
 	
-  @edit_set
   Scenario: editing a set
     Given I have at least one media set in personal library
 	When I change set data
 	Then I see updated set details
+	
+  Scenario: deleting a set
+	Given I have at least one media set in personal library
+    When I delete set
+    Then I see media library page without this set
+	
+  Scenario: copying set from media library to showcase
+    Given I have at least one media set in personal library
+	When I copy the set to user showcase
+	Then I see the set on user showcase
+	
+  Scenario: create a presentation containing existing items from media library
+	Given I have at least one presentation in personal library
+	When I create presentation with existing items from media library
+	Then I see created presentation with selected items
