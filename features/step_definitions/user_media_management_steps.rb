@@ -32,6 +32,7 @@ When /^I create set$/ do
 
   # Wizard Step 4: Remain access type by default and Publish
   page.execute_script("$('.ok').click();")
+  sleep 2
 end
 
 Then /^I see set details page$/ do
@@ -183,6 +184,7 @@ When /^I change set data$/ do
 
   #Open the first Set
   all('.content-set a').first.click
+  sleep 2
   
   #Click Preferences icon
   find('li.submenu-item a.edit-button-img').click
@@ -240,6 +242,8 @@ When /^I delete set$/ do
 			break
 		end
 	}
+	sleep 2
+	
 	#Click Preferences icon
 	find('li.submenu-item a.edit-button-img').click
 	#Click Delete link
@@ -290,14 +294,48 @@ Then /^I see the set on user showcase$/ do
 	!flag rescue (raise "Set #{@set_title} hasn't been copied to showcase")
 end
 
-Given /^I have at least one presentation in personal library$/ do 
-	pending
-end
-
 When /^I create presentation with existing items from media library$/ do
-	pending
-end
+  #Click Library
+  find('.library').click
 
-Then /^I see created presentation with selected items$/ do
-	pending
+  #Click Add Presentation
+  new_url = current_url + '/presentations/new'
+  visit new_url
+  sleep 2
+
+  # Define presentation title, privacy settings, categories, status
+  @presentation_title = Faker::Company.bs
+  fill_in "presentation_title", :with => @presentation_title
+  find('div#presentation_visibility_chzn.chzn-container a.chzn-single').click
+  
+  #Define presentation visibility
+  all('ul.chzn-results li').first.click
+  
+  #Choose category
+  find(".category-input").set("name_67")
+  all("ul.dropdown-menu li.active a").first.click
+
+  # Upload presentation cover
+  path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+      path.gsub!(/\//, "\\")
+  end
+  
+  within(".item-fields-with-poster") { attach_file "file", path}
+  sleep 5
+  page.execute_script("$('.ok').click();")
+  sleep 2
+
+  #Add widget
+  click_link("add-widget-content_item")
+  #Select item from first media set
+  #within(".upload-tab-content"){attach_file "file", path}
+  find('.simple_form li.galleries-tab a').click
+  sleep 3
+  all('.simple_form .submission-content-set a').first.click
+  sleep 3
+  all('.simple_form .photo-item img.pic').first.click
+  sleep 5
+  
+  find('a.done-button.preview-save-button').click
 end

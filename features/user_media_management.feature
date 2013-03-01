@@ -38,8 +38,9 @@ Feature: User manages media content
     Given I have at least one media set in personal library
 	When I copy the set to user showcase
 	Then I see the set on user showcase
-	
+
+	@exist_presentation
   Scenario: create a presentation containing existing items from media library
-	Given I have at least one presentation in personal library
+	Given I have at least one media set in personal library
 	When I create presentation with existing items from media library
-	Then I see created presentation with selected items
+	Then I see presentation details page
