@@ -4,7 +4,7 @@ Feature: User manages media content
   I want manage my media content
 
  Background:
-   Given I logged in with "user28@example.com" and "secret"
+   Given I logged in with "user139@yopmail.com" and "secret"
 
   Scenario: creating a set
     When I create set
@@ -39,7 +39,7 @@ Feature: User manages media content
 	When I copy the set to user showcase
 	Then I see the set on user showcase
 
-	@exist_presentation
+@debug
   Scenario: create a presentation containing existing items from media library
 	Given I have at least one media set in personal library
 	When I create presentation with existing items from media library

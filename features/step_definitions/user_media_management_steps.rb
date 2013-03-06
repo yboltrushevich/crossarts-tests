@@ -7,7 +7,7 @@ When /^I create set$/ do
   all('div#media-header.profile-header .button').first.click
 
   # Wizard Step 1: Define set title
-  @set_title = Faker::Company.bs
+  @set_title = Faker::Lorem.word
   page.find(:css, "div.wizard-step-1 input.name").set @set_title
   page.execute_script("$('.ok').click();")
 
@@ -51,7 +51,7 @@ When /^I create presentation$/ do
   visit new_url
 
   # Define presentation title, privacy settings, categories, status
-  @presentation_title = Faker::Company.bs
+  @presentation_title = Faker::Lorem.word
   fill_in "presentation_title", :with => @presentation_title
   find('div#presentation_visibility_chzn.chzn-container a.chzn-single').click
   
@@ -110,7 +110,7 @@ When /^I create set with existing items from media library$/ do
   all('div#media-header.profile-header .button').first.click
 
   # Wizard Step 1: Define set title
-  @set_title = Faker::Company.bs
+  @set_title = Faker::Lorem.word
   page.find(:css, "div.wizard-step-1 input.name").set @set_title
   page.execute_script("$('.ok').click();")
   sleep 2
@@ -192,11 +192,11 @@ When /^I change set data$/ do
   page.execute_script("$('li.submenu-item a')[1].click()")
   
   # Define new set title
-  @new_set_title = Faker::Company.bs
+  @new_set_title = Faker::Lorem.word
   fill_in "content_set_title", :with => @new_set_title
 
   #Define new set description
-  @new_set_description = Faker::Company.bs
+  @new_set_description = Faker::Lorem.word
   fill_in "content_set_description", :with => @new_set_description
   
   #Add a new category
@@ -221,7 +221,7 @@ When /^I change set data$/ do
   
   #Click Done button
   page.execute_script("$('input.done-button').click();")
-  sleep 2
+  sleep 3
 end
 
 Then /^I see updated set details$/ do
@@ -233,12 +233,12 @@ end
 When /^I delete set$/ do
 	#Click Library
 	find('.library').click
-	sleep 2
+	sleep 5
   
 	sets = all('.content-set h4.item-title')
 	sets.each{ |set|
 		if set.text == @set_title
-			set.parent.click
+			set.click
 			break
 		end
 	}
@@ -263,15 +263,17 @@ end
 When /^I copy the set to user showcase$/ do
 	#Click Library
 	find('.library').click
-	sleep 2
+	sleep 5
   
 	sets = all('.content-set h4.item-title')
 	sets.each{ |set|
 		if set.text == @set_title
-			set.parent.click
+			set.click
 			break
 		end
 	}
+	
+	sleep 3
 	#Click Preferences icon
 	find('li.submenu-item a.edit-button-img').click
 	#Click Copy to Showcase link
@@ -304,7 +306,7 @@ When /^I create presentation with existing items from media library$/ do
   sleep 2
 
   # Define presentation title, privacy settings, categories, status
-  @presentation_title = Faker::Company.bs
+  @presentation_title = Faker::Lorem.word
   fill_in "presentation_title", :with => @presentation_title
   find('div#presentation_visibility_chzn.chzn-container a.chzn-single').click
   
@@ -333,7 +335,7 @@ When /^I create presentation with existing items from media library$/ do
   find('.simple_form li.galleries-tab a').click
   sleep 3
   all('.simple_form .submission-content-set a').first.click
-  sleep 3
+  sleep 5
   all('.simple_form .photo-item img.pic').first.click
   sleep 5
   
