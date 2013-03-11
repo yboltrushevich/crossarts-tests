@@ -1,10 +1,11 @@
+@media
 Feature: User manages media content
   In order to publish my media
   As a user
   I want manage my media content
 
  Background:
-   Given I logged in with "user139@yopmail.com" and "secret"
+   Given I logged in with "user1@example.com" and "secret"
 
   Scenario: creating a set
     When I create set

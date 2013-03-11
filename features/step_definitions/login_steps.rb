@@ -19,16 +19,18 @@ Given /^I logged in with "(.*?)" and "(.*?)"$/ do |email, password|
     | user_email | #{email}       |
 	  | user_password | #{password} |
   })
-  step "I should be redirected to Home page"
 end
 
 Given /^I logged in as an admin$/ do
   step %{I logged in with "admin@example.com" and "secret"}
+  step "I should be redirected to Home page"
 end
 
 Given /^I can login as a user$/ do
   user = get_user
   step %{I logged in with "#{user['email']}" and "#{user['password']}"}
+  sleep 2
+  page.should have_css("div.modal-wizard.edit-profile")
 end
 
 When /^I logout$/ do
