@@ -9,6 +9,7 @@ Feature: Sign up
     And I sign up with valid data as <user>
     When admin confirms my registration
     Then I can login as a user
+    And I can configure my profile
 
   Examples:
     | user        |

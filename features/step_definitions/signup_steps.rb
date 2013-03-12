@@ -105,3 +105,30 @@ When /^I sign up with valid data as consumer$/ do
   page.should have_css('div.registration-step-1 input#confirmation-token')
   find('.close').click
 end
+
+Then /^I can configure my profile$/ do
+  #configure 1st step after confirmation
+  #upload avatar
+  path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+    path.gsub!(/\//, "\\")
+  end
+  within(".upload-block-avatar") {attach_file "file", path}
+  sleep 5
+  page.execute_script("$('.modal-wizard.cropper-wizard .ok').click();")
+  sleep 2
+  # define occupation
+  find('.upload-block-text input[data-occupation="true"]').set(Faker::Lorem.word)
+  # about me
+  find('.upload-block-text textarea').set(Faker::Lorem.word)
+  page.execute_script("$('.ok').click();")
+
+  #configure 2nd step after confirmation
+  find(".profile-category-input").set("name_1")
+  all("ul.dropdown-menu li.active a").first.click
+  page.execute_script("$('.ok').click();")
+
+  #configure 3rd step after confirmation
+  page.execute_script("$('.ok').click();")
+end
+

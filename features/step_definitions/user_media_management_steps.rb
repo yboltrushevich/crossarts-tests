@@ -82,7 +82,7 @@ When /^I create presentation$/ do
   #Doesn't work for Rus locale
   #click_link("Create Presentation")
   find('a.done-button.preview-save-button').click
-
+  sleep 5
   #Create presentation via preview mode
 =begin
   click_link('Preview')
@@ -255,9 +255,11 @@ end
 Then /^I see media library page without this set$/ do
 	page.should have_css('.user-media-index')
 	sets = all('.content-set h4.item-title')
-	sets.each{ |set|
-		set.text == @set_title rescue (raise "Set #{@set_title} hasn't been deleted")
-	}
+	sets.each do |set|
+		if set.text == @set_title
+      raise "Set #{@set_title} hasn't been deleted"
+    end
+	end
 end
 
 When /^I copy the set to user showcase$/ do
@@ -340,4 +342,64 @@ When /^I create presentation with existing items from media library$/ do
   sleep 5
   
   find('a.done-button.preview-save-button').click
+end
+
+Given /^I have at least one presentation in personal library$/ do
+  step 'I create presentation'
+end
+
+When /^I change presentation data$/ do
+  #Click Edit button
+  all('.links-right a').first.click
+
+  # Define new presentation title
+  @new_presentation_title = Faker::Lorem.word
+  fill_in "presentation_title", :with => @new_presentation_title
+
+  # Change visibility
+  find('div#presentation_visibility_chzn.chzn-container a.chzn-single').click
+  find('ul.chzn-results li#presentation_visibility_chzn_o_3').click
+
+  # Change status
+  find('div#presentation_status_chzn a.chzn-single').click
+  find('ul.chzn-results li#presentation_status_chzn_o_2').click
+
+  # Add new category
+  find(".category-input").set("name_3")
+  all("ul.dropdown-menu li.active a").first.click
+
+  #Add CI widget
+  click_link("add-widget-content_item")
+  path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/image1.jpg" )
+  if path.match(/^D:\//)
+    path.gsub!(/\//, "\\")
+  end
+  within(".upload-tab-content"){attach_file "file", path}
+
+  #Add title widget
+  click_link("add-widget-title")
+  @title_widget = Faker::Lorem.word
+  find('#widget_content_attributes_body').set(@title_widget)
+
+  #Click Update button
+  find('a.done-button.preview-save-button').click
+end
+
+Then /^I see updated presentation details$/ do
+  page.should have_css('.presentations-show')
+  page.should have_content(@new_presentation_title)
+  page.should have_content(@title_widget)
+end
+
+When /^I delete presentation$/ do
+  pending
+end
+Then /^I see media library page without this presentation$/ do
+  pending
+end
+When /^I copy the presentation to user showcase$/ do
+  pending
+end
+Then /^I see the presentation on user showcase$/ do
+  pending
 end
