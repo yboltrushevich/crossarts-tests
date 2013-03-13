@@ -34,7 +34,7 @@ Feature: User manages media content
 	Given I have at least one media set in personal library
     When I delete set
     Then I see media library page without this set
-	
+
   Scenario: copying set from media library to showcase
     Given I have at least one media set in personal library
 	When I copy the set to user showcase
@@ -45,7 +45,6 @@ Feature: User manages media content
 	When I create presentation with existing items from media library
 	Then I see presentation details page
 
-  @debug
   Scenario: editing a presentation
     Given I have at least one presentation in personal library
     When I change presentation data
@@ -56,6 +55,7 @@ Feature: User manages media content
     When I delete presentation
     Then I see media library page without this presentation
 
+  @debug
   Scenario: copying presentation from media library to showcase
     Given I have at least one presentation in personal library
     When I copy the presentation to user showcase

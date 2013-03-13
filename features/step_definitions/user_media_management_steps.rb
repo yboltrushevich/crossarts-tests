@@ -83,13 +83,6 @@ When /^I create presentation$/ do
   #click_link("Create Presentation")
   find('a.done-button.preview-save-button').click
   sleep 5
-  #Create presentation via preview mode
-=begin
-  click_link('Preview')
-  sleep 2
-  all('a.preview-save-button').first.click
-=end
-  #BUG redirect on SHOWCASE -> now presentation on media
 end
 
 Then /^I see presentation details page$/ do
@@ -286,16 +279,8 @@ end
 Then /^I see the set on user showcase$/ do
 	#Go to Showcase list
 	find('.back-arrow').click
-	
-	flag = false
-	sets = all('.content-set h4.item-title')
-	sets.each{ |set|
-		if set.text == @set_title 
-			flag = true
-			break
-		end	
-	}
-	!flag rescue (raise "Set #{@set_title} hasn't been copied to showcase")
+
+  page.should have_content(@set_title)
 end
 
 When /^I create presentation with existing items from media library$/ do
@@ -392,14 +377,30 @@ Then /^I see updated presentation details$/ do
 end
 
 When /^I delete presentation$/ do
-  pending
+  #Click Delete presentation
+  find('div.links-right a[data-method="delete"]').click
+  page.driver.browser.switch_to.alert.accept
 end
+
 Then /^I see media library page without this presentation$/ do
-  pending
+  page.should have_css('.user-media-index')
+  presentations = all('.presentation h4.item-title')
+  presentations.each do |presentation|
+    if presentation.text == @presentation_title
+      raise "Presentation #{@presentation_title} hasn't been deleted"
+    end
+  end
 end
+
 When /^I copy the presentation to user showcase$/ do
-  pending
+  #Click the Copy to Showcase link
+  find('div.links-right a[data-method="post"]').click
+
 end
+
 Then /^I see the presentation on user showcase$/ do
-  pending
+  #Go to Showcase list
+  page.execute_script("$('div.links-right a')[2].click();")
+
+  page.should have_content(@presentation_title)
 end
