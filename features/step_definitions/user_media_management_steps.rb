@@ -4,7 +4,7 @@ When /^I create set$/ do
 
   sleep 5
   #Click Add Set
-  all('div#media-header.profile-header .button').first.click
+  all('div.actions-block .button')[1].click
 
   # Wizard Step 1: Define set title
   @set_title = Faker::Lorem.word
@@ -94,13 +94,13 @@ When /^I have at least one media set in personal library$/ do
 end
 
 When /^I create set with existing items from media library$/ do
-  #Click Library
+  #Switch to All tab
   sleep 3
-  find('.library').click
+  all('.nav-links a').first.click
 
   sleep 5
   #Click Add Set
-  all('div#media-header.profile-header .button').first.click
+  all('div.actions-block .button')[1].click
 
   # Wizard Step 1: Define set title
   @set_title = Faker::Lorem.word
@@ -131,13 +131,20 @@ When /^I create set with existing items from media library$/ do
 end
 
 When /^I upload media to existing set$/ do
-  #Click Library
-  sleep 5
-  find('.library').click
+  #Switch to All tab
+  sleep 3
+  all('.nav-links a').first.click
   sleep 5
 
-  #Open the first Set
-  all('.content-set a').first.click
+  #Find created set in library
+  sets = all('.content-set h4.item-title')
+  sets.each{ |set|
+    if set.text == @set_title
+      set.click
+      break
+    end
+  }
+  sleep 2
 
   #Click Add Artworks
   find('a.button').click
@@ -165,24 +172,29 @@ end
 
 Then /^I see uploaded media in selected set$/ do
   page.should have_css('.content_sets-show')
-  page.should have_content(@set_title)
   page.should have_content(@filename)
 end
 
 When /^I change set data$/ do
-  #Click Library
-  sleep 5
-  find('.library').click
+  #Switch to All tab
+  sleep 3
+  all('.nav-links a').first.click
   sleep 5
 
-  #Open the first Set
-  all('.content-set a').first.click
+  #Find created set in library
+  sets = all('.content-set h4.item-title')
+  sets.each{ |set|
+    if set.text == @set_title
+      set.click
+      break
+    end
+  }
   sleep 2
   
   #Click Preferences icon
-  find('li.submenu-item a.edit-button-img').click
+  find('div.nav-popup.settings a.nav-item').click
   #Click Edit link
-  page.execute_script("$('li.submenu-item a')[1].click()")
+  all('ul.nav-menu[data-media-settings="data-media-settings"] a')[0].click
   
   # Define new set title
   @new_set_title = Faker::Lorem.word
@@ -224,8 +236,9 @@ Then /^I see updated set details$/ do
 end
 
 When /^I delete set$/ do
-	#Click Library
-	find('.library').click
+  #Switch to All tab
+  sleep 3
+  all('.nav-links a').first.click
 	sleep 5
   
 	sets = all('.content-set h4.item-title')
@@ -236,11 +249,11 @@ When /^I delete set$/ do
 		end
 	}
 	sleep 2
-	
-	#Click Preferences icon
-	find('li.submenu-item a.edit-button-img').click
-	#Click Delete link
-	page.execute_script("$('li.submenu-item a')[2].click()")
+
+  #Click Preferences icon
+  find('div.nav-popup.settings a.nav-item').click
+  #Click Delete link
+  all('ul.nav-menu[data-media-settings="data-media-settings"] a')[1].click
 	page.driver.browser.switch_to.alert.accept
 	sleep 5
 end
@@ -256,8 +269,9 @@ Then /^I see media library page without this set$/ do
 end
 
 When /^I copy the set to user showcase$/ do
-	#Click Library
-	find('.library').click
+  #Switch to All tab
+  sleep 3
+  all('.nav-links a').first.click
 	sleep 5
   
 	sets = all('.content-set h4.item-title')
@@ -284,8 +298,9 @@ Then /^I see the set on user showcase$/ do
 end
 
 When /^I create presentation with existing items from media library$/ do
-  #Click Library
-  find('.library').click
+  #Switch to All tab
+  sleep 3
+  all('.nav-links a').first.click
 
   #Click Add Presentation
   new_url = current_url + '/presentations/new'

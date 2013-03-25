@@ -2,11 +2,6 @@ Given /^I am on Login page$/ do
   visit "/users/login"
 end
 
-When /^I login with credentials:$/ do |table|
-  table.rows_hash.each { |field, value| fill_in field, :with => value }
-  find('.btn').click
-end
-
 Then /^I should be redirected to Home page$/ do
   page.should have_css("body.pages-index.signed-in")
   sleep 5
@@ -15,10 +10,9 @@ end
 
 Given /^I logged in with "(.*?)" and "(.*?)"$/ do |email, password|
   step "I am on Login page"
-  step "I login with credentials:", table(%{
-    | user_email | #{email}       |
-	  | user_password | #{password} |
-  })
+  find('input#user-email').set(email)
+  find('input#user-password').set(password)
+  page.execute_script("$('button.ok').click()")
 end
 
 Given /^I logged in as an admin$/ do

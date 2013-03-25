@@ -6,7 +6,5 @@ Background:
   Given I am on Login page
   
 Scenario: User logins into system
-  When I login with credentials:
-	| user_email | user1@example.com |
-	| user_password | secret |
+  When I logged in with "user1@example.com" and "secret"
   Then I should be redirected to Home page
